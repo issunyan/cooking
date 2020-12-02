@@ -56,8 +56,8 @@ export default {
   },
   computed: {},
   mounted() {
-    this.meatDishs = window.localStorage.getItem('meatDishs') || [];
-    this.greenDishs = window.localStorage.getItem('greenDishs') || [];
+    this.meatDishs = JSON.parse(window.localStorage.getItem('meatDishs') || '[]');
+    this.greenDishs = JSON.parse(window.localStorage.getItem('greenDishs') || '[]');
     const curr = new Date();
     const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 1))
       .toLocaleString('zh')
@@ -70,7 +70,9 @@ export default {
   methods: {
     openRandom() {
       if (!this.meatDishs.length) {
-        this.$message.error('请添加');
+        this.$message.error('请添加菜品');
+      } else if (this.meatDishs.every(item => item.selected)) {
+        this.$message.error('已经无法随机啦，请继续添加新的菜品');
       } else {
         this.random();
         this.randomVisible = true;
@@ -87,6 +89,7 @@ export default {
         dish.selected = true;
       }
       this.storage();
+      this.randomVisible = false;
     },
     storage() {
       window.localStorage.setItem('meatDishs', JSON.stringify(this.meatDishs));
