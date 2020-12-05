@@ -1,8 +1,10 @@
 <template>
   <div>
     <div>当前周：{{ currentWeek }}</div>
-    <el-button type="primary" @click="addVisible = true">添 加</el-button>
-    <el-dialog title="添加" :visible.sync="addVisible">
+    <el-button type="primary" @click="addVisible = true"
+      ><i class="el-icon-edit"></i> 添 加</el-button
+    >
+    <el-dialog title="添加" :visible="addVisible">
       <el-input placeholder="请输入内容" v-model="meat">
         <template slot="prepend">肉</template>
       </el-input>
@@ -15,8 +17,9 @@
       </span>
     </el-dialog>
 
-    <el-button @click="openRandom">随机</el-button>
-    <el-dialog title="随机" :visible.sync="randomVisible">
+    <el-button @click="openRandom"><i class="el-icon-fork-spoon"></i> 随机</el-button>
+    <el-button @click="deleteAll"><i class="el-icon-delete"></i> 一键清空</el-button>
+    <el-dialog title="随机" :visible="randomVisible">
       <dish-card :data-source="selectedDishs" />
       <span slot="footer">
         <el-button @click="randomVisible = false">取 消</el-button>
@@ -54,10 +57,10 @@ export default {
       randomVisible: false,
     };
   },
-  computed: {},
   mounted() {
     this.meatDishs = JSON.parse(window.localStorage.getItem('meatDishs') || '[]');
     this.greenDishs = JSON.parse(window.localStorage.getItem('greenDishs') || '[]');
+
     const curr = new Date();
     const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 1))
       .toLocaleString('zh')
@@ -79,10 +82,11 @@ export default {
       }
     },
     random() {
-      const { meatDishs, greenDishs } = this;
-      const meatIndex = Math.floor(Math.random() * meatDishs.length);
-      const greenIndex = Math.floor(Math.random() * greenDishs.length);
-      this.selectedDishs = [meatDishs[meatIndex], greenDishs[greenIndex]];
+      const selectedMeatDishs = this.meatDishs.filter(item => !item.selected);
+      const selectedGreenDishs = this.greenDishs.filter(item => !item.selected);
+      const meatIndex = Math.floor(Math.random() * selectedMeatDishs.length);
+      const greenIndex = Math.floor(Math.random() * selectedGreenDishs.length);
+      this.selectedDishs = [selectedMeatDishs[meatIndex], selectedGreenDishs[greenIndex]];
     },
     resolve() {
       for (const dish of this.selectedDishs) {
@@ -112,6 +116,11 @@ export default {
 
     remove(index) {
       this.dishs.splice(index, 1);
+    },
+    deleteAll() {
+      this.meatDishs = [];
+      this.greenDishs = [];
+      this.storage();
     },
   },
 };

@@ -9,11 +9,7 @@
         已选中
       </div>
       <el-card class="card" :body-style="{ padding: '0px' }">
-        <div
-          v-if="remove"
-          @click="handleClose(index)"
-          class="close el-icon-close"
-        ></div>
+        <div v-if="remove" @click="handleClose(index)" class="close el-icon-close"></div>
         <img
           src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
           class="image"
@@ -43,7 +39,7 @@ export default {
   methods: {
     handleClose(index) {
       this.dataSource.splice(index, 1);
-
+      this.$parent.storage();
     },
   },
 };
