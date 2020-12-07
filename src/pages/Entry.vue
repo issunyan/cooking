@@ -89,8 +89,8 @@ export default {
       this.selectedDishs = [selectedMeatDishs[meatIndex], selectedGreenDishs[greenIndex]];
     },
     resolve() {
-      for (const dish of this.selectedDishs) {
-        dish.selected = true;
+      for (const item of this.selectedDishs) {
+        item.selected = true;
       }
       this.storage();
       this.randomVisible = false;

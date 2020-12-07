@@ -1,8 +1,8 @@
 <template>
   <div class="list">
     <div
-      v-for="({ name, key, selected }, index) in dataSource"
-      :key="key"
+      v-for="({ name, selected }, index) in dataSource"
+      :key="index"
       style="width: 235px; position: relative;"
     >
       <div v-if="selected && remove" class="selected">
